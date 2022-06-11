@@ -17,9 +17,9 @@ yarm test
 
 The test window will open automatically. Follow below step
 
-1. ![First step](/first.jpg)
-2. ![Second step](/second.jpg)
-3. ![Third step](/third.jpg)
+1. ![First step](/first.png)
+2. ![Second step](/second.png)
+3. ![Third step](/third.png)
 
 ## The app should do the following:
 
