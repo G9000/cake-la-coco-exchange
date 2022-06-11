@@ -26,7 +26,7 @@ export function Dropdown({
     >
       <div className="relative rounded-lg">
         <Listbox.Button
-          className="relative py-8 text-left focus:outline-none  md:max-w-[220px] px-4 group cursor-pointer"
+          className="relative py-8 text-left focus:outline-none  md:max-w-[220px] px-4 group cursor-pointer min-w-[140px]"
           data-cy={buttonTestId}
         >
           <div className="flex items-center gap-x-4">

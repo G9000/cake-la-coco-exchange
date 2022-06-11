@@ -1,6 +1,5 @@
 import * as React from "react";
 import type { NextPage } from "next";
-import { GetStaticProps } from "next";
 import Head from "next/head";
 import Layout from "@/components/Layout";
 import type { CoinMarket } from "@/types/index";
@@ -24,7 +23,7 @@ const SUPPORTED_CRYPTO = [
   "bitcoin, defichain, ethereum, dogecoin, tether, solana, cardano",
 ];
 
-export const getServerSideProps: GetStaticProps = async () => {
+export const getServerSideProps = async () => {
   const coins = SUPPORTED_CRYPTO.join("%2C");
   const fetchCoins = await fetch(
     `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coins}&order=market_cap_desc&per_page=100&page=1&sparkline=false`
