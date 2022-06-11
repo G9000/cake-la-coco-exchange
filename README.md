@@ -49,11 +49,16 @@ The second one is a better endpoint due to I'm able to pull more than just a pri
 
 ## Suggestions for improving this task:
 
-1.Integrate it with CI/CD like maybe github action.
+1. Integrate it with CI/CD like maybe github action.
+2. Add a feature to add a new currency to the VS list.
 
 ## Anything stands out to you:
 
 1. Nothing in particular but maybe finding the reason of why only fews vs_currency accepted? Need to learn more.
+
+## Comments :
+
+1. First of all I would like to say thanks for the opportunity to participate in this task. Else I never really get my hand dirty with gecko api.
 
 ## Checklist
 
