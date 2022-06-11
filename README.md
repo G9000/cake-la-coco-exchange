@@ -17,9 +17,12 @@ yarm test
 
 The test window will open automatically. Follow below step
 
-1. ![First step](/public/first.png)
-2. ![Second step](/public/second.png)
-3. ![Third step](/public/third.png)
+1. Run command yarn test
+   ![First step](/public/first.png)
+2. Choose E2E testing and choose any browser you want to use for testing and click start
+   ![Second step](/public/second.png)
+3. Choose and double click exchange.cy.ts to start the automated testing
+   ![Third step](/public/third.png)
 
 ## The app should do the following:
 

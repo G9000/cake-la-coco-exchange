@@ -5,80 +5,72 @@ import { Dropdown } from "./Dropdown";
 import { SelectorIcon } from "@heroicons/react/solid";
 import type { CoinMarket } from "@/types/index";
 
-enum InputType {
+enum InputTypes {
   Swap = "swap",
   Want = "want",
 }
 
-interface PropsType {
+interface PropsTypes {
   coinLists?: CoinMarket[];
 }
 
+interface InputStateType {
+  type: string;
+  amount: number | undefined;
+}
+
+// Calculate exchange rate
 function calculateExcahnge(
-  swapToken: number,
-  wantToken: number,
-  { type = "swap", amount = 1 }
+  swapPrice: number,
+  wantPrice: number,
+  { type, amount = 0 }: InputStateType
 ) {
   if (
-    typeof swapToken !== "number" ||
-    typeof wantToken !== "number" ||
+    typeof swapPrice !== "number" ||
+    typeof wantPrice !== "number" ||
     typeof amount !== "number"
   ) {
-    throw new Error(
-      `${swapToken} or ${wantToken} or ${amount} must be a number`
-    );
+    throw new Error(`Either swapPrice or wantPrice or Amount is not a number`);
   }
 
   const exchange =
-    type === "swap" ? swapToken / wantToken : wantToken / swapToken;
+    type === InputTypes.Swap ? swapPrice / wantPrice : wantPrice / swapPrice;
 
   const totalExchangeValue = amount * exchange;
 
   return totalExchangeValue;
 }
 
-export function Exchange({ coinLists = [] }: PropsType) {
+export function Exchange({ coinLists = [] }: PropsTypes) {
   const [swapToken, setSwapToken] = React.useState(coinLists[0]);
-  const [wantToken, setWantToken] = React.useState(coinLists[1]);
-  const [swapAmount, setSwapAmount] = React.useState(1);
-  const [wantAmount, setWantAmount] = React.useState(0);
-  const [inputSelected, setInputSelected] = React.useState<InputType>(
-    InputType.Swap
-  );
-  const [exchangeRate, setExchangeRate] = React.useState(0);
+  const [wantToken, setWantToken] = React.useState(coinLists[6]);
+  const [swapAmount, setSwapAmount] = React.useState<number>(0);
+  const [wantAmount, setWantAmount] = React.useState<number>(0);
+  const [inputSelected, setInputSelected] = React.useState<InputTypes>();
+  const [exchangeRate, setExchangeRate] = React.useState<string | undefined>();
 
   React.useEffect(() => {
-    const newValue = calculateExcahnge(
-      swapToken.current_price,
-      wantToken.current_price,
-      inputSelected === InputType.Want
-        ? { type: InputType.Want, amount: wantAmount }
-        : { type: InputType.Swap, amount: swapAmount }
-    );
-    setExchangeRate(newValue);
-  }, [swapAmount, wantAmount, wantToken, swapToken, inputSelected]);
+    const exchangeValue = new BigNumber(
+      calculateExcahnge(
+        swapToken.current_price,
+        wantToken.current_price,
+        inputSelected === InputTypes.Swap
+          ? { type: InputTypes.Swap, amount: swapAmount }
+          : { type: InputTypes.Want, amount: wantAmount }
+      )
+    ).toFixed();
+
+    setExchangeRate(exchangeValue);
+  }, [inputSelected, swapAmount, swapToken, wantAmount, wantToken]);
 
   function handleInputSwap() {
     let temp = wantToken;
     setWantToken(swapToken);
     setInputSelected(
-      inputSelected === InputType.Swap ? InputType.Swap : InputType.Want
+      inputSelected === InputTypes.Swap ? InputTypes.Swap : InputTypes.Want
     );
 
     setSwapToken(temp);
-  }
-
-  function handleInputChange({
-    type,
-    amount,
-  }: {
-    type: InputType;
-    amount: number;
-  }) {
-    if (typeof amount !== "number") {
-      throw new Error(`${amount} must be a number`);
-    }
-    type === InputType.Swap ? setSwapAmount(amount) : setWantAmount(amount);
   }
 
   return (
@@ -89,22 +81,17 @@ export function Exchange({ coinLists = [] }: PropsType) {
             To Swap
           </label>
           <input
+            type="number"
             onChange={(e) => {
-              setInputSelected(InputType.Swap);
-              handleInputChange({
-                type: InputType.Swap,
-                amount: Number(e.target.value),
-              });
+              setInputSelected(InputTypes.Swap);
+              setSwapAmount(Number(e.target.value));
             }}
             pattern="[0-9]*"
             onKeyDown={(evt) =>
               ["e", "E", "+", "-"].includes(evt.key) && evt.preventDefault()
             }
-            type="number"
             value={
-              inputSelected === InputType.Want
-                ? new BigNumber(exchangeRate).toFixed()
-                : swapAmount
+              inputSelected === InputTypes.Want ? exchangeRate : swapAmount
             }
             className="focus:outline-none bg-transparent text-xl md:text-4xl font-bold w-full h-full"
             data-cy="swap-input"
@@ -138,22 +125,17 @@ export function Exchange({ coinLists = [] }: PropsType) {
             To Buy
           </label>
           <input
+            type="number"
             onChange={(e) => {
-              setInputSelected(InputType.Want);
-              handleInputChange({
-                type: InputType.Want,
-                amount: Number(e.target.value),
-              });
+              setInputSelected(InputTypes.Want);
+              setWantAmount(Number(e.target.value));
             }}
             pattern="[0-9]*"
             onKeyDown={(evt) =>
               ["e", "E", "+", "-"].includes(evt.key) && evt.preventDefault()
             }
-            type="number"
             value={
-              inputSelected === InputType.Swap
-                ? new BigNumber(exchangeRate).toFixed()
-                : wantAmount
+              inputSelected === InputTypes.Swap ? exchangeRate : wantAmount
             }
             className="focus:outline-none bg-transparent text-xl md:text-4xl font-bold w-full h-full"
             data-cy="want-input"
