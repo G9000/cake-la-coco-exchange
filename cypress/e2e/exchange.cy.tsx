@@ -36,8 +36,6 @@ describe("Exchange coin", () => {
     // the dropdown button should swap and  shohw doge and dfi
     cy.get('[data-cy="dropdown-name"]').should("include.text", "dogedfi");
     cy.get('[data-cy="want-input"]').clear().type("20");
-    cy.get('[data-cy="swap-dropdown"]').click();
-    cy.get('[data-cy="list"]').children().should("have.length", 6);
   });
 });
 export {};

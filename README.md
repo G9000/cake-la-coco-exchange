@@ -1,5 +1,7 @@
 # La Coco Crypto Exchange
 
+### Visit here https://cake-la-coco-exchange.vercel.app/
+
 ## Setup
 
 ```
@@ -12,6 +14,12 @@ To run the web and test
 yarn dev
 yarm test
 ```
+
+The test window will open automatically. Follow below step
+
+1. ![First step](/first.jpg)
+2. ![Second step](/second.jpg)
+3. ![Third step](/third.jpg)
 
 ## The app should do the following:
 
