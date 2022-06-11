@@ -123,7 +123,7 @@ export function Exchange({ coinLists = [] }: PropsType) {
       <button
         className={clsx(
           "rounded-full z-40 rotate-45 absolute flex border-4 gap-x-4 items-center",
-          "hover:border-cyan-400 hover:ring-4 hover:ring-cyan-400 hover:ring-opacity-20 hover:bg-gray-600 hover:text-gray-100",
+          "hover:border-emerald-400 hover:ring-4 hover:ring-emerald-400 hover:ring-opacity-20 hover:bg-cyan-900 hover:text-gray-100",
           "text-gray-600 font-bold p-2 md:p-4 bg-gray-100"
         )}
         onClick={handleInputSwap}

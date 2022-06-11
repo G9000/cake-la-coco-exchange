@@ -13,7 +13,7 @@ export function Dropdown({
 }: {
   data: CoinMarket;
   lists: CoinMarket[];
-  activeList: CoinMarket;
+  activeList: Pick<CoinMarket, "id">;
   onChange: (value: CoinMarket) => void;
   buttonTestId?: string;
 }) {
@@ -30,7 +30,7 @@ export function Dropdown({
           data-cy={buttonTestId}
         >
           <div className="flex items-center gap-x-4">
-            <div className="flex items-center gap-x-2 md:gap-x-4">
+            <div className="flex items-center gap-x-2 md:gap-x-4 w-[60px] md:w-[140px]">
               <Image
                 src={data.image}
                 alt={`${data.id} logo`}
