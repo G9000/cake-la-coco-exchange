@@ -44,8 +44,8 @@ function calculateExcahnge(
 export function Exchange({ coinLists = [] }: PropsTypes) {
   const [swapToken, setSwapToken] = React.useState(coinLists[0]);
   const [wantToken, setWantToken] = React.useState(coinLists[6]);
-  const [swapAmount, setSwapAmount] = React.useState<number>(0);
-  const [wantAmount, setWantAmount] = React.useState<number>(0);
+  const [swapAmount, setSwapAmount] = React.useState("");
+  const [wantAmount, setWantAmount] = React.useState("");
   const [inputSelected, setInputSelected] = React.useState<InputTypes>();
   const [exchangeRate, setExchangeRate] = React.useState<string | undefined>();
 
@@ -55,8 +55,14 @@ export function Exchange({ coinLists = [] }: PropsTypes) {
         swapToken.current_price,
         wantToken.current_price,
         inputSelected === InputTypes.Swap
-          ? { type: InputTypes.Swap, amount: swapAmount }
-          : { type: InputTypes.Want, amount: wantAmount }
+          ? {
+              type: InputTypes.Swap,
+              amount: new BigNumber(swapAmount).toNumber(),
+            }
+          : {
+              type: InputTypes.Want,
+              amount: new BigNumber(wantAmount).toNumber(),
+            }
       )
     ).toFixed();
 
@@ -84,7 +90,7 @@ export function Exchange({ coinLists = [] }: PropsTypes) {
             type="number"
             onChange={(e) => {
               setInputSelected(InputTypes.Swap);
-              setSwapAmount(Number(e.target.value));
+              setSwapAmount(e.target.value);
             }}
             pattern="[0-9]*"
             onKeyDown={(evt) =>
@@ -128,7 +134,7 @@ export function Exchange({ coinLists = [] }: PropsTypes) {
             type="number"
             onChange={(e) => {
               setInputSelected(InputTypes.Want);
-              setWantAmount(Number(e.target.value));
+              setWantAmount(e.target.value);
             }}
             pattern="[0-9]*"
             onKeyDown={(evt) =>
