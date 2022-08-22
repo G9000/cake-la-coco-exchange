@@ -4,6 +4,10 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    fontFamily: {
+      sans: ["Exo 2", "sans-serif"],
+      mono: ["Share Tech Mono", "monospace"],
+    },
     extend: {
       backgroundImage: {
         "grid-tile-light": "url('/grid-tiles-light.svg')",

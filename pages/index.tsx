@@ -1,10 +1,9 @@
 import * as React from "react";
 import type { NextPage } from "next";
-import Head from "next/head";
-import Layout from "@/components/Layout";
 import type { CoinMarket } from "@/types/index";
 import clsx from "clsx";
 import { Exchange } from "@/components/Exchange";
+import { ExchangeSection } from "./section/exchangeSection";
 
 // CONSTANT
 // For easier adding new coin to the list
@@ -41,31 +40,15 @@ export const getServerSideProps = async () => {
 
 const Home: NextPage<PageProps> = ({ coinLists = [] }) => {
   return (
-    <Layout>
-      <Head>
-        <title>La Coco Scammer Crypto Exchange</title>
-        <meta name="description" content="La Coco scammer exchange" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <section className="mx-5">
+      {/* <div className="absolute inset-0 bg-gradient-spectrum" />
+      <div className="absolute inset-0 bg-grid-tile-light bg-top flex items-center justify-center overflow-hidden" /> */}
+      <ExchangeSection coinLists={coinLists} />
+      {/* <Exchange coinLists={coinLists} /> */}
 
-      <div className="absolute inset-0 bg-gradient-spectrum" />
-      <div className="absolute inset-0 bg-grid-tile-light bg-top flex items-center justify-center overflow-hidden" />
-
-      <Exchange coinLists={coinLists} />
-
-      <div
-        className={clsx(
-          "absolute inset-0",
-          "bg-gradient-to-b from-neutral-100 via-[#18181800] to-neutral-100"
-        )}
-      />
-      <div
-        className={clsx(
-          "absolute inset-0",
-          "bg-gradient-to-r from-neutral-100 via-[#18181800] to-neutral-100"
-        )}
-      />
-    </Layout>
+      {/* <div className="absolute inset-0 bg-gradient-to-b from-neutral-100 via-[#18181800] to-neutral-100" />
+      <div className="absolute inset-0 bg-gradient-to-r from-neutral-100 via-[#18181800] to-neutral-100" /> */}
+    </section>
   );
 };
 

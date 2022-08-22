@@ -1,4 +1,5 @@
 import * as React from "react";
+import Head from "next/head";
 import { Navbar } from "@/components/Navbar";
 
 const Layout = ({
@@ -7,8 +8,13 @@ const Layout = ({
   children: React.ReactNode | React.ReactNode[];
 }) => {
   return (
-    <div className="bg-gray-100">
-      <div className="min-h-screen h-full px-4">
+    <div className="bg-gray-900">
+      <Head>
+        <title>La Coco Scammer Crypto Exchange</title>
+        <meta name="description" content="La Coco scammer exchange" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div className="min-h-screen">
         <Navbar />
         <main>{children}</main>
       </div>

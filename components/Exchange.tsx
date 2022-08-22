@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { Dropdown } from "./Dropdown";
 import { SelectorIcon } from "@heroicons/react/solid";
 import type { CoinMarket } from "@/types/index";
+import { Input } from "./Input";
 
 enum InputTypes {
   Swap = "swap",
@@ -47,7 +48,7 @@ export function Exchange({ coinLists = [] }: PropsTypes) {
   const [swapAmount, setSwapAmount] = React.useState("");
   const [wantAmount, setWantAmount] = React.useState("");
   const [inputSelected, setInputSelected] = React.useState<InputTypes>();
-  const [exchangeRate, setExchangeRate] = React.useState<string | undefined>();
+  const [exchangeRate, setExchangeRate] = React.useState("");
 
   React.useEffect(() => {
     const exchangeValue = new BigNumber(
@@ -81,10 +82,10 @@ export function Exchange({ coinLists = [] }: PropsTypes) {
 
   return (
     <div className="w-full flex flex-col items-center justify-center h-full mx-auto relative z-40">
-      <div className="flex rounded-t-3xl border-2 bg-gray-50">
-        <div className="flex flex-col pl-6 py-4">
-          <label className="text-sm font-bold uppercase text-gray-400">
-            To Swap
+      <div className="flex gap-x-4">
+        <div className="flex flex-col py-4 px-10 bg-gray-50">
+          <label className="text-xs font-bold uppercase text-gray-400">
+            <span className="text-gray-600">{swapToken.symbol}</span> To Swap
           </label>
           <input
             type="number"
@@ -99,35 +100,57 @@ export function Exchange({ coinLists = [] }: PropsTypes) {
             value={
               inputSelected === InputTypes.Want ? exchangeRate : swapAmount
             }
-            className="focus:outline-none bg-transparent text-xl md:text-4xl font-bold w-full h-full"
+            className="focus:outline-none bg-transparent text-2xl font-bold w-full h-full mt-4"
             data-cy="swap-input"
           />
         </div>
 
-        <Dropdown
+        <div className="flex flex-col px-10 py-4 bg-gray-50">
+          <label className="text-xs font-bold uppercase text-gray-400">
+            {wantToken.symbol} To Buy
+          </label>
+          <input
+            type="number"
+            onChange={(e) => {
+              setInputSelected(InputTypes.Want);
+              setWantAmount(e.target.value);
+            }}
+            pattern="[0-9]*"
+            onKeyDown={(evt) =>
+              ["e", "E", "+", "-"].includes(evt.key) && evt.preventDefault()
+            }
+            value={
+              inputSelected === InputTypes.Swap ? exchangeRate : wantAmount
+            }
+            className="focus:outline-none bg-transparent font-bold text-2xl w-full h-full mt-4"
+            data-cy="want-input"
+          />
+        </div>
+
+        {/* <Dropdown
           data={swapToken}
           onChange={setSwapToken}
           lists={coinLists}
           activeList={wantToken}
           buttonTestId="swap-dropdown"
-        />
+        /> */}
       </div>
 
-      <button
+      {/* <button
         className={clsx(
           "rounded-full z-40 rotate-45 absolute flex border-4 gap-x-4 items-center",
           "hover:border-emerald-400 hover:ring-4 hover:ring-emerald-400 hover:ring-opacity-20 hover:bg-cyan-900 hover:text-gray-100",
-          "text-gray-600 font-bold p-2 md:p-4 bg-gray-100"
+          "text-gray-600 font-bold p-2 bg-gray-100"
         )}
         onClick={handleInputSwap}
         data-cy="swap-button"
       >
         <SelectorIcon className="h-5 w-5" aria-hidden="true" />
-      </button>
+      </button> */}
 
-      <div className="flex rounded-b-3xl border-2 border-t-0 bg-gray-50">
+      {/* <div className="flex rounded-b-3xl border-2 border-t-0 bg-gray-50">
         <div className="flex flex-col pl-6 py-4">
-          <label className="text-sm font-bold uppercase text-gray-400">
+          <label className="text-xs font-bold uppercase text-gray-400">
             To Buy
           </label>
           <input
@@ -143,7 +166,7 @@ export function Exchange({ coinLists = [] }: PropsTypes) {
             value={
               inputSelected === InputTypes.Swap ? exchangeRate : wantAmount
             }
-            className="focus:outline-none bg-transparent text-xl md:text-4xl font-bold w-full h-full"
+            className="focus:outline-none bg-transparent font-bold text-2xl w-full h-full"
             data-cy="want-input"
           />
         </div>
@@ -155,7 +178,7 @@ export function Exchange({ coinLists = [] }: PropsTypes) {
           activeList={swapToken}
           buttonTestId="want-dropdown"
         />
-      </div>
+      </div> */}
     </div>
   );
 }

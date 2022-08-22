@@ -24,22 +24,22 @@ export function Dropdown({
         onChange(value);
       }}
     >
-      <div className="relative rounded-lg">
+      <div className="relative bg-gray-50">
         <Listbox.Button
-          className="relative py-8 text-left focus:outline-none  md:max-w-[220px] px-4 group cursor-pointer min-w-[140px]"
+          className="relative py-8 text-left focus:outline-none px-4 group cursor-pointer"
           data-cy={buttonTestId}
         >
-          <div className="flex items-center gap-x-4">
-            <div className="flex items-center gap-x-2 md:gap-x-4 w-[60px] md:w-[140px]">
+          <div className="flex items-center">
+            <div className="flex items-center gap-x-4 w-[100px]">
               <Image
                 src={data.image}
                 alt={`${data.id} logo`}
-                width={29}
-                height={29}
+                width={19}
+                height={19}
               />
               <span
                 data-cy="dropdown-name"
-                className="block truncate text-base md:text-2xl font-bold uppercase text-gray-400 group-hover:text-gray-800"
+                className="block truncate text-lg font-bold uppercase text-gray-400 group-hover:text-gray-800"
               >
                 {data.symbol}
               </span>
@@ -79,8 +79,8 @@ export function Dropdown({
                         <Image
                           src={list.image}
                           alt={`${list.id} logo`}
-                          width={29}
-                          height={29}
+                          width={19}
+                          height={19}
                         />
                         <span
                           className={`block truncate ${

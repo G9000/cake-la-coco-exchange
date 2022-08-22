@@ -1,4 +1,5 @@
 import * as React from "react";
+import Image from "next/image";
 
 export const Navbar = () => {
   const [date, setDate] = React.useState(new Date());
@@ -25,12 +26,35 @@ export const Navbar = () => {
 
   return (
     <nav className="flex items-center justify-center max-w-[1620px] w-full mx-auto py-20 px-8 z-50 relative">
-      <div className="flex flex-col gap-y-4 items-center">
-        <h1 className="font-extrabold text-transparent text-3xl md:text-4xl bg-clip-text bg-gradient-to-r from-cyan-600 to-emerald-400 leading-relaxed">
-          La Coco Exchange
-        </h1>
-        <div className="text-gray-400 font-semibold">
-          {!isSSR && formattedDate() + " " + date.toLocaleTimeString()}
+      <div>
+        <div className="flex items-center gap-x-4">
+          <div className="h-[60px] w-[60px] relative mx-auto">
+            <Image
+              src="/pepe.png"
+              alt="Pepe masta"
+              layout="fill"
+              objectFit="contain"
+              quality={100}
+            />
+          </div>
+          <h1 className="font-extrabold text-transparent text-2xl md:text-4xl bg-clip-text bg-gradient-to-r from-cyan-600 to-emerald-400">
+            La coco scammer exchange
+          </h1>
+        </div>
+
+        <div className="mt-4 md:mt-0 md:text-right">
+          <p className="text-gray-400">We love stonk and make monies</p>
+          {/* <p className="text-gray-400 text-xs">
+            Trusted online crypto exchange. Powered by{" "}
+            <a
+              href="https://www.coingecko.com/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Coingecko
+            </a>
+            . {!isSSR && formattedDate() + " " + date.toLocaleTimeString()}
+          </p> */}
         </div>
       </div>
     </nav>
