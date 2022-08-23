@@ -22,11 +22,13 @@ export const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
   const [wantToken, setWantToken] = React.useState(coinLists[6]);
   const [swapAmount, setSwapAmount] = React.useState(new BigNumber(""));
   const [wantAmount, setWantAmount] = React.useState(new BigNumber(""));
-  const [inputSelected, setInputSelected] = React.useState<InputTypes>(
-    InputTypes.Swap
+  const [inputSelected, setInputSelected] = React.useState<InputTypes>();
+  const [exchangeRate, setExchangeRate] = React.useState<BigNumber | string>(
+    new BigNumber("")
   );
-  const [exchangeRate, setExchangeRate] = React.useState(new BigNumber(""));
   const [rate, setRate] = React.useState(0);
+
+  const currencyRate = new BigNumber(rate);
 
   function calculateExcahnge(
     swapPrice: number,
@@ -52,23 +54,26 @@ export const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
   }
 
   React.useEffect(() => {
-    const exchangeValue = new BigNumber(
-      calculateExcahnge(
-        swapToken.current_price,
-        wantToken.current_price,
-        inputSelected === InputTypes.Swap
-          ? {
-              type: InputTypes.Swap,
-              amount: new BigNumber(swapAmount).toNumber(),
-            }
-          : {
-              type: InputTypes.Want,
-              amount: new BigNumber(wantAmount).toNumber(),
-            }
-      )
-    ).toFixed(2);
+    const exchangeValue = calculateExcahnge(
+      swapToken.current_price,
+      wantToken.current_price,
+      inputSelected === InputTypes.Swap
+        ? {
+            type: InputTypes.Swap,
+            amount: new BigNumber(swapAmount).toNumber(),
+          }
+        : {
+            type: InputTypes.Want,
+            amount: new BigNumber(wantAmount).toNumber(),
+          }
+    );
 
-    setExchangeRate(new BigNumber(exchangeValue));
+    const rate = new BigNumber(exchangeValue);
+    setExchangeRate(
+      rate.isLessThanOrEqualTo(0.1) && rate.isGreaterThan(0)
+        ? rate.toFixed(8)
+        : rate.toFixed(2)
+    );
   }, [inputSelected, swapAmount, swapToken, wantAmount, wantToken]);
 
   function handleInputSwap() {
@@ -81,33 +86,74 @@ export const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
     setSwapToken(temp);
   }
 
+  React.useEffect(() => {
+    if (
+      inputSelected === InputTypes.Want &&
+      new BigNumber(swapAmount).isGreaterThan(0)
+    ) {
+      setSwapAmount(new BigNumber(""));
+    } else if (
+      inputSelected === InputTypes.Swap &&
+      new BigNumber(wantAmount).isGreaterThan(0)
+    ) {
+      setWantAmount(new BigNumber(""));
+    }
+  }, [inputSelected, swapAmount, wantAmount]);
+
   return (
     <div>
       <div className="flex flex-col md:flex-row gap-y-6">
         <Input
           title={`${swapToken.symbol} to swap`}
+          tokenImg={swapToken.image}
           onChange={(e) => {
             setInputSelected(InputTypes.Swap);
             setSwapAmount(e.target.value);
           }}
           value={inputSelected === InputTypes.Want ? exchangeRate : swapAmount}
+          dropdownData={{
+            tokenData: swapToken,
+            onTokenChange: setSwapToken,
+            lists: coinLists,
+            activeList: wantToken,
+          }}
           testID="swap"
         />
         <Input
           title={`${wantToken.symbol} to buy`}
+          tokenImg={wantToken.image}
           onChange={(e) => {
             setInputSelected(InputTypes.Want);
             setWantAmount(e.target.value);
           }}
           value={inputSelected === InputTypes.Swap ? exchangeRate : wantAmount}
+          dropdownData={{
+            tokenData: wantToken,
+            onTokenChange: setWantToken,
+            lists: coinLists,
+            activeList: swapToken,
+          }}
           testID="want"
         />
       </div>
-      <div className="mt-10">
+      <div className="mt-10 border border-cyan-400 border-opacity-20 px-4 py-6">
         <div>
-          <div className="text-cyan-400 text-sm">Current exchange rate</div>
-          <div className="text-cyan-400 text-2xl font-semibold">
-            {new BigNumber(rate).toFixed(2)}
+          <div className="flex items-center gap-x-4 text-cyan-400 text-sm">
+            <div>Current exchange rate</div>
+            <div className="font-bold uppercase py-1 px-2 bg-cyan-900">
+              {swapToken.symbol}-{wantToken.symbol}
+            </div>
+          </div>
+
+          <div className="text-cyan-400 text-2xl font-bold">
+            {inputSelected &&
+            (new BigNumber(swapAmount).isGreaterThan(0) ||
+              new BigNumber(wantAmount).isGreaterThan(0))
+              ? currencyRate.isLessThanOrEqualTo(0.1) &&
+                currencyRate.isGreaterThan(0)
+                ? currencyRate.toFixed(8)
+                : currencyRate.toFixed(2)
+              : "N/A"}
           </div>
         </div>
       </div>

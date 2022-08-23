@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ArrowCircleDownIcon } from "@heroicons/react/solid";
+import { ArrowCircleDownIcon } from "@heroicons/react/solid";
 import Image from "next/image";
 import type { CoinMarket } from "@/types/index";
 
@@ -10,12 +10,14 @@ export function Dropdown({
   lists,
   activeList,
   buttonTestId,
+  containerStyle,
 }: {
   data: CoinMarket;
   lists: CoinMarket[];
   activeList: Pick<CoinMarket, "id">;
   onChange: (value: CoinMarket) => void;
   buttonTestId?: string;
+  containerStyle?: string;
 }) {
   return (
     <Listbox
@@ -24,31 +26,15 @@ export function Dropdown({
         onChange(value);
       }}
     >
-      <div className="relative bg-gray-50">
+      <div className={containerStyle}>
         <Listbox.Button
-          className="relative py-8 text-left focus:outline-none px-4 group cursor-pointer"
+          className="focus:outline-none group cursor-pointer"
           data-cy={buttonTestId}
         >
-          <div className="flex items-center">
-            <div className="flex items-center gap-x-4 w-[100px]">
-              <Image
-                src={data.image}
-                alt={`${data.id} logo`}
-                width={19}
-                height={19}
-              />
-              <span
-                data-cy="dropdown-name"
-                className="block truncate text-lg font-bold uppercase text-gray-400 group-hover:text-gray-800"
-              >
-                {data.symbol}
-              </span>
-            </div>
-
-            <span className="flex items-center text-gray-400 group-hover:text-gray-800">
-              <ArrowCircleDownIcon className="h-6 w-6 " aria-hidden="true" />
-            </span>
-          </div>
+          <ArrowCircleDownIcon
+            className="h-6 w-6 text-cyan-400 absolute right-5 top-1"
+            aria-hidden="true"
+          />
         </Listbox.Button>
         <Transition
           as={React.Fragment}
@@ -58,17 +44,16 @@ export function Dropdown({
         >
           <Listbox.Options
             data-cy="list"
-            className="absolute mt-1 max-h-60 w-full overflow-auto bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-50"
+            className="absolute overflow-auto h-[260px] w-full mt-6 bg-cyan-400"
           >
             {lists.map(
-              (list, listIdx) =>
+              (list, idx) =>
                 list.id !== activeList.id && (
                   <Listbox.Option
-                    key={listIdx}
+                    key={idx}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 px-4 ${
-                        active ? "bg-amber-100 text-amber-900" : "text-gray-900"
-                      }`
+                      `relative cursor-default select-none p-4 border-b text-sm border-cyan-100 border-opacity-40 
+                      ${active ? "bg-cyan-00 text-cyan-900" : "text-cyan-700"}`
                     }
                     value={list}
                     id={list.id}
@@ -76,12 +61,21 @@ export function Dropdown({
                   >
                     {({ selected }) => (
                       <div className="flex items-center gap-x-4">
-                        <Image
+                        {/* <Image
                           src={list.image}
                           alt={`${list.id} logo`}
-                          width={19}
-                          height={19}
+                          width={29}
+                          height={29}
+                        /> */}
+                        <div
+                          className="absolute bg-no-repeat bg-contain h-full w-full"
+                          style={{
+                            backgroundImage: `url(${list.image || ""})`,
+                            backgroundPosition: "right 10px top 20px",
+                            opacity: 0.6,
+                          }}
                         />
+
                         <span
                           className={`block truncate ${
                             selected ? "font-medium" : "font-normal"
