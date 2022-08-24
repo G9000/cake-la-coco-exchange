@@ -11,7 +11,7 @@ const Layout = ({
     <div className="bg-gray-100">
       <Head>
         <title>La Pepe Scammer Crypto Exchange</title>
-        <meta name="description" content="La Coco scammer exchange" />
+        <meta name="description" content="La pepe scammer exchange" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="min-h-screen">
