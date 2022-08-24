@@ -12,8 +12,8 @@ git clone https://github.com/G9000/cake-la-coco-exchange.git
 To run the web and test
 
 ```
-yarn dev
-yarm test
+npm run dev
+npm run test
 ```
 
 ## The app should do the following:
