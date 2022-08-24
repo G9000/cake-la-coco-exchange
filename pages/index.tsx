@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { NextPage } from "next";
 import type { CoinMarket } from "@/types/index";
-import ExchangeSection from "./section/exchangeSection";
+import ExchangeSection from "@/components/section/exchangeSection";
 
 // CONSTANT
 // For easier adding new coin to the list

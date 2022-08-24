@@ -14,7 +14,7 @@ export const Navbar = () => {
               quality={100}
             />
           </div>
-          <h1 className="font-extrabold text-transparent text-2xl md:text-4xl text-cyan-900">
+          <h1 className="font-extrabold text-2xl md:text-4xl text-cyan-900">
             La Pepe scammer exchange
           </h1>
         </div>
