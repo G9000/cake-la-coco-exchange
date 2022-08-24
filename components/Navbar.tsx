@@ -14,13 +14,13 @@ export const Navbar = () => {
               quality={100}
             />
           </div>
-          <h1 className="font-extrabold text-2xl md:text-4xl text-cyan-900">
+          <h1 className="font-extrabold text-2xl md:text-4xl text-cyan-900" data-testid="lepepe-company-title">
             La Pepe scammer exchange
           </h1>
         </div>
 
         <div className="mt-4 md:mt-0 md:text-right">
-          <p className="text-gray-400">We love stonk and make monies</p>
+          <p className="text-gray-400" data-testid="lepepe-company-motto">We love stonk and make monies</p>
         </div>
       </div>
     </nav>

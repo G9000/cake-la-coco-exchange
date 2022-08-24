@@ -194,7 +194,7 @@ const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
                 alt={`${swapToken.id} logo`}
                 width={19}
                 height={19}
-                data-testid="swap-token"
+                data-testid="swap-token-pair"
               />
             </div>
 
@@ -204,7 +204,7 @@ const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
                 alt={`${buyToken.id} logo`}
                 width={19}
                 height={19}
-                data-testid="buy-token"
+                data-testid="buy-token-pair"
               />
             </div>
           </div>
