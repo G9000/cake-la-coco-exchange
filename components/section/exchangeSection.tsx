@@ -123,7 +123,7 @@ const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
   }, []);
 
   return (
-    <div className="relative justify-center w-full max-w-[375px] mx-auto z-50">
+    <div className="relative justify-center w-full max-w-[375px] mx-auto z-50 pb-20">
       <div className=" bg-gray-100 rounded-2xl">
         <Input
           title={`${swapToken.symbol} to swap`}
