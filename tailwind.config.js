@@ -5,8 +5,8 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      sans: ["Exo 2", "sans-serif"],
-      mono: ["Share Tech Mono", "monospace"],
+      sans: ['"Exo 2"', "sans-serif"],
+      mono: ['"Share Tech Mono"', "monospace"],
     },
     extend: {
       backgroundImage: {

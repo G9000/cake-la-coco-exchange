@@ -16,6 +16,8 @@ interface InputProps {
   onChange: (e: any) => void;
   value: BigNumber | string;
   dropdownData: DropdownProps;
+  containerStyle?: string;
+  tokenBgStyle?: string;
 }
 
 export const Input = ({
@@ -25,48 +27,59 @@ export const Input = ({
   value,
   tokenImg,
   dropdownData,
+  containerStyle,
+  tokenBgStyle,
 }: InputProps) => {
   return (
     <div className="relative flex items-center">
       <div
-        className="relative flex overflow-hidden bg-contain border-b border-cyan-400 border-opacity-60 items-center justify-between h-[60px] bg-cyan-400 bg-opacity-5 px-6"
+        className={`flex overflow-hidden bg-contain items-center justify-between h-[85px] bg-cyan-400 bg-opacity-10 px-6 ${containerStyle}`}
         data-testid={testID}
+        style={{
+          zIndex: 25,
+        }}
       >
         <div
-          className="absolute bg-no-repeat bg-contain h-full w-full -ml-6"
+          className={`absolute bg-no-repeat bg-contain h-full w-full -ml-6 ${tokenBgStyle}`}
           style={{
             backgroundImage: `url(${tokenImg || ""})`,
-            backgroundPosition: "left -10px top 20px",
+            backgroundPosition: "right -10px top 20px",
             opacity: 0.25,
           }}
         />
 
-        <label className="text-xs text-cyan-400 font-sans w-4/12 uppercase">
-          {title}
-        </label>
-        <input
-          type="number"
-          onChange={onChange}
-          pattern="[0-9]*"
-          onKeyDown={(evt) =>
-            ["e", "E", "+", "-"].includes(evt.key) && evt.preventDefault()
-          }
-          value={
-            isNaN(new BigNumber(value).toNumber())
-              ? ""
-              : new BigNumber(value).toNumber()
-          }
-          className="z-50 w-full focus:outline-none bg-transparent text-2xl font-bold text-cyan-200 font-mono ml-2"
-          data-testid={`${testID}-input`}
-        />
+        <div className="z-50 w-10/12">
+          <label
+            className="text-xs text-cyan-600 font-sans uppercase font-bold"
+            data-testid={`${testID}-label`}
+          >
+            {title}
+          </label>
+          <input
+            type="number"
+            onChange={onChange}
+            pattern="[0-9]*"
+            onKeyDown={(evt) =>
+              ["e", "E", "+", "-"].includes(evt.key) && evt.preventDefault()
+            }
+            value={
+              isNaN(new BigNumber(value).toNumber())
+                ? ""
+                : new BigNumber(value).toFixed()
+            }
+            className="w-full focus:outline-none bg-transparent text-2xl font-bold text-cyan-600 font-mono"
+            data-testid={`${testID}-input`}
+          />
+        </div>
       </div>
+
       <Dropdown
         data={dropdownData.tokenData}
         onChange={dropdownData.onTokenChange}
         lists={dropdownData.lists}
         activeList={dropdownData.activeList}
-        buttonTestId="swap-dropdown"
-        containerStyle="absolute h-6 w-full right-0 z-50"
+        containerStyle="absolute h-full w-full right-0 top-9"
+        testID={`${testID}-dropdown`}
       />
     </div>
   );

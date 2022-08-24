@@ -2,7 +2,6 @@ import * as React from "react";
 import type { NextPage } from "next";
 import type { CoinMarket } from "@/types/index";
 import clsx from "clsx";
-import { Exchange } from "@/components/Exchange";
 import { ExchangeSection } from "./section/exchangeSection";
 
 // CONSTANT
@@ -40,14 +39,12 @@ export const getServerSideProps = async () => {
 
 const Home: NextPage<PageProps> = ({ coinLists = [] }) => {
   return (
-    <section className="mx-5">
-      {/* <div className="absolute inset-0 bg-gradient-spectrum" />
-      <div className="absolute inset-0 bg-grid-tile-light bg-top flex items-center justify-center overflow-hidden" /> */}
+    <section className="w-full mx-auto px-5 max-w-[1200px]">
+      <div className="absolute inset-0 bg-gradient-spectrum" />
+      <div className="absolute inset-0 bg-grid-tile-light bg-top flex items-center justify-center overflow-hidden" />
       <ExchangeSection coinLists={coinLists} />
-      {/* <Exchange coinLists={coinLists} /> */}
-
-      {/* <div className="absolute inset-0 bg-gradient-to-b from-neutral-100 via-[#18181800] to-neutral-100" />
-      <div className="absolute inset-0 bg-gradient-to-r from-neutral-100 via-[#18181800] to-neutral-100" /> */}
+      <div className="absolute inset-0 bg-gradient-to-b from-neutral-100 via-[#18181800] to-neutral-100 z-10" />
+      <div className="absolute inset-0 bg-gradient-to-r from-neutral-100 via-[#18181800] to-neutral-100 z-10" />
     </section>
   );
 };

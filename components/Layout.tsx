@@ -8,9 +8,9 @@ const Layout = ({
   children: React.ReactNode | React.ReactNode[];
 }) => {
   return (
-    <div className="bg-gray-900">
+    <div className="bg-gray-100">
       <Head>
-        <title>La Coco Scammer Crypto Exchange</title>
+        <title>La Pepe Scammer Crypto Exchange</title>
         <meta name="description" content="La Coco scammer exchange" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

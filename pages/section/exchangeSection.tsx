@@ -2,6 +2,8 @@ import { Input } from "@/components/Input";
 import type { CoinMarket } from "@/types/index";
 import * as React from "react";
 import BigNumber from "bignumber.js";
+import { SwitchVerticalIcon } from "@heroicons/react/solid";
+import Image from "next/image";
 
 interface PropsTypes {
   coinLists?: CoinMarket[];
@@ -18,18 +20,21 @@ enum InputTypes {
 }
 
 export const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
+  /// Quick fix for Hydration issue https://github.com/vercel/next.js/discussions/35773
+  const [isSSR, setIsSSR] = React.useState(true);
   const [swapToken, setSwapToken] = React.useState(coinLists[0]);
-  const [wantToken, setWantToken] = React.useState(coinLists[6]);
+  const [buyToken, setBuyToken] = React.useState(coinLists[6]);
   const [swapAmount, setSwapAmount] = React.useState(new BigNumber(""));
-  const [wantAmount, setWantAmount] = React.useState(new BigNumber(""));
+  const [buyAmount, setBuyAmount] = React.useState(new BigNumber(""));
   const [inputSelected, setInputSelected] = React.useState<InputTypes>();
   const [exchangeRate, setExchangeRate] = React.useState<BigNumber | string>(
     new BigNumber("")
   );
   const [rate, setRate] = React.useState(0);
-
+  const [date, setDate] = React.useState(new Date());
   const currencyRate = new BigNumber(rate);
 
+  // Calculate exchange price
   function calculateExcahnge(
     swapPrice: number,
     wantPrice: number,
@@ -40,9 +45,7 @@ export const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
       typeof wantPrice !== "number" ||
       typeof amount !== "number"
     ) {
-      throw new Error(
-        `Either swapPrice or wantPrice or Amount is not a number`
-      );
+      throw new Error(`Make sure your input type is correct`);
     }
     const exchange =
       type === InputTypes.Swap ? swapPrice / wantPrice : wantPrice / swapPrice;
@@ -56,7 +59,7 @@ export const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
   React.useEffect(() => {
     const exchangeValue = calculateExcahnge(
       swapToken.current_price,
-      wantToken.current_price,
+      buyToken.current_price,
       inputSelected === InputTypes.Swap
         ? {
             type: InputTypes.Swap,
@@ -64,7 +67,7 @@ export const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
           }
         : {
             type: InputTypes.Want,
-            amount: new BigNumber(wantAmount).toNumber(),
+            amount: new BigNumber(buyAmount).toNumber(),
           }
     );
 
@@ -74,11 +77,11 @@ export const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
         ? rate.toFixed(8)
         : rate.toFixed(2)
     );
-  }, [inputSelected, swapAmount, swapToken, wantAmount, wantToken]);
+  }, [inputSelected, swapAmount, swapToken, buyAmount, buyToken]);
 
   function handleInputSwap() {
-    let temp = wantToken;
-    setWantToken(swapToken);
+    let temp = buyToken;
+    setBuyToken(swapToken);
     setInputSelected(
       inputSelected === InputTypes.Swap ? InputTypes.Swap : InputTypes.Want
     );
@@ -94,15 +97,34 @@ export const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
       setSwapAmount(new BigNumber(""));
     } else if (
       inputSelected === InputTypes.Swap &&
-      new BigNumber(wantAmount).isGreaterThan(0)
+      new BigNumber(buyAmount).isGreaterThan(0)
     ) {
-      setWantAmount(new BigNumber(""));
+      setBuyAmount(new BigNumber(""));
     }
-  }, [inputSelected, swapAmount, wantAmount]);
+  }, [inputSelected, swapAmount, buyAmount]);
+
+  let dateConfig = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  } as const;
+
+  function formattedDate() {
+    return new Date(date).toLocaleDateString("en-US", dateConfig);
+  }
+
+  React.useEffect(() => {
+    const interval = setInterval(() => setDate(new Date()), 1000);
+    setIsSSR(false);
+
+    return function cleanup() {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
-    <div>
-      <div className="flex flex-col md:flex-row gap-y-6">
+    <div className="relative justify-center w-full max-w-[375px] mx-auto z-50">
+      <div className=" bg-gray-100 rounded-2xl">
         <Input
           title={`${swapToken.symbol} to swap`}
           tokenImg={swapToken.image}
@@ -110,52 +132,105 @@ export const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
             setInputSelected(InputTypes.Swap);
             setSwapAmount(e.target.value);
           }}
-          value={inputSelected === InputTypes.Want ? exchangeRate : swapAmount}
+          value={
+            inputSelected === InputTypes.Want
+              ? new BigNumber(exchangeRate).toFixed(2)
+              : swapAmount
+          }
           dropdownData={{
             tokenData: swapToken,
             onTokenChange: setSwapToken,
             lists: coinLists,
-            activeList: wantToken,
+            activeList: buyToken,
           }}
+          containerStyle="rounded-t-2xl border-b border-cyan-400 border-opacity-60"
           testID="swap"
         />
+        <div
+          className="absolute inset-x-1/2 -ml-4 z-40"
+          style={{
+            top: "4rem",
+            bottom: "4rem",
+          }}
+        >
+          <SwitchVerticalIcon
+            onClick={handleInputSwap}
+            className="h-10 w-10 text-cyan-600 p-2 rounded-full bg-sky-200 bg-opacity-60 cursor-pointer"
+            aria-hidden="true"
+            data-testid="switch-token"
+          />
+        </div>
+
         <Input
-          title={`${wantToken.symbol} to buy`}
-          tokenImg={wantToken.image}
+          title={`${buyToken.symbol} to buy`}
+          tokenImg={buyToken.image}
           onChange={(e) => {
             setInputSelected(InputTypes.Want);
-            setWantAmount(e.target.value);
+            setBuyAmount(e.target.value);
           }}
-          value={inputSelected === InputTypes.Swap ? exchangeRate : wantAmount}
+          value={
+            inputSelected === InputTypes.Swap
+              ? new BigNumber(exchangeRate).toFixed(2)
+              : buyAmount
+          }
           dropdownData={{
-            tokenData: wantToken,
-            onTokenChange: setWantToken,
+            tokenData: buyToken,
+            onTokenChange: setBuyToken,
             lists: coinLists,
             activeList: swapToken,
           }}
-          testID="want"
+          containerStyle="rounded-b-2xl"
+          tokenBgStyle="rounded-b-2xl"
+          testID="buy"
         />
       </div>
-      <div className="mt-10 border border-cyan-400 border-opacity-20 px-4 py-6">
-        <div>
-          <div className="flex items-center gap-x-4 text-cyan-400 text-sm">
-            <div>Current exchange rate</div>
-            <div className="font-bold uppercase py-1 px-2 bg-cyan-900">
-              {swapToken.symbol}-{wantToken.symbol}
+      <div className="mt-10 border border-cyan-400 border-opacity-40 px-4 py-6 bg-gray-100 rounded-2xl">
+        <div className="flex items-center gap-x-4">
+          <div className="text-cyan-600 text-sm">Current exchange rate</div>
+          <div className="w-fit flex">
+            <div className="bg-gray-200 p-1 rounded-full flex items-center text-center absolute">
+              <Image
+                src={swapToken.image}
+                alt={`${swapToken.id} logo`}
+                width={19}
+                height={19}
+                data-testid="swap-token"
+              />
+            </div>
+
+            <div className="bg-gray-200 p-1 rounded-full flex items-center text-center ml-5 z-40">
+              <Image
+                src={buyToken.image}
+                alt={`${buyToken.id} logo`}
+                width={19}
+                height={19}
+                data-testid="buy-token"
+              />
             </div>
           </div>
-
-          <div className="text-cyan-400 text-2xl font-bold">
-            {inputSelected &&
-            (new BigNumber(swapAmount).isGreaterThan(0) ||
-              new BigNumber(wantAmount).isGreaterThan(0))
-              ? currencyRate.isLessThanOrEqualTo(0.1) &&
-                currencyRate.isGreaterThan(0)
-                ? currencyRate.toFixed(8)
-                : currencyRate.toFixed(2)
-              : "N/A"}
-          </div>
         </div>
+
+        <div
+          className="text-cyan-600 text-3xl font-bold mt-2 font-mono"
+          data-testid="exchange-rate"
+        >
+          {inputSelected &&
+          (new BigNumber(swapAmount).isGreaterThan(0) ||
+            new BigNumber(buyAmount).isGreaterThan(0))
+            ? currencyRate.isLessThanOrEqualTo(0.1) &&
+              currencyRate.isGreaterThan(0)
+              ? currencyRate.toFixed(8)
+              : currencyRate.toFixed(2)
+            : "N/A"}
+        </div>
+        <p className="text-cyan-600 text-opacity-60 text-xs mt-14">
+          Trusted online crypto exchange. For sure will make your bank account
+          <strong> STONK</strong>. Powered by{" "}
+          <a href="https://www.coingecko.com/" target="_blank" rel="noreferrer">
+            Coingecko
+          </a>
+          . {!isSSR && formattedDate() + " " + date.toLocaleTimeString()}
+        </p>
       </div>
     </div>
   );
