@@ -1,5 +1,5 @@
 # La Pepe Crypto Exchange
-![Third step](/public/third.png)
+![Third step](/public/pepe.png)
 
 ### Visit here https://cake-la-coco-exchange.vercel.app/
 

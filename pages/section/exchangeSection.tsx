@@ -19,7 +19,7 @@ enum InputTypes {
   Want = "want",
 }
 
-export const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
+const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
   /// Quick fix for Hydration issue https://github.com/vercel/next.js/discussions/35773
   const [isSSR, setIsSSR] = React.useState(true);
   const [swapToken, setSwapToken] = React.useState(coinLists[0]);
@@ -235,3 +235,5 @@ export const ExchangeSection = ({ coinLists = [] }: PropsTypes) => {
     </div>
   );
 };
+
+export default ExchangeSection
