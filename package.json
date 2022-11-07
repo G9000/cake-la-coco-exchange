@@ -10,7 +10,7 @@
     "test": "cypress open"
   },
   "dependencies": {
-    "@headlessui/react": "^1.6.4",
+    "@headlessui/react": "^1.7.4",
     "@heroicons/react": "^1.0.6",
     "bignumber.js": "^9.0.2",
     "clsx": "^1.1.1",
