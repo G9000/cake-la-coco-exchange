@@ -20,14 +20,14 @@ export interface CoinMarket {
   market_cap_change_percentage_24h: number;
   circulating_supply: number;
   total_supply: number;
-  max_supply: number;
+  max_supply: number | null;
   ath: number;
   ath_change_percentage: number;
-  ath_date: Date;
+  ath_date: Date | string;
   atl: number;
   atl_change_percentage: number;
-  atl_date: Date;
+  atl_date: Date | string;
   roi?: any;
-  last_updated: Date;
-  sparkline_in_7d: SparklineIn7d;
+  last_updated: Date | string;
+  sparkline_in_7d?: SparklineIn7d;
 }

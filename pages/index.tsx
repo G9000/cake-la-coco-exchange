@@ -2,6 +2,7 @@ import * as React from "react";
 import type { NextPage } from "next";
 import type { CoinMarket } from "@/types/index";
 import ExchangeSection from "@/components/section/exchangeSection";
+import MockCoinData from "./mocks/CoinMock.json";
 
 // CONSTANT
 // For easier adding new coin to the list
@@ -21,19 +22,8 @@ interface PageProps {
 }
 
 export const getServerSideProps = async () => {
-  const coins = SUPPORTED_CRYPTO.join("%2C");
-  const fetchCoins = await fetch(
-    `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${coins}&order=market_cap_desc&per_page=100&page=1&sparkline=false`
-  );
-
-  if (fetchCoins.ok) {
-    const coinLists: CoinMarket[] = await fetchCoins.json();
-    return { props: { coinLists } };
-  }
-
-  return {
-    props: {},
-  };
+  const coinLists: CoinMarket[] = MockCoinData;
+  return { props: { coinLists } };
 };
 
 const Home: NextPage<PageProps> = ({ coinLists = [] }) => {
